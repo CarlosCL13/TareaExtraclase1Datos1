@@ -20,7 +20,7 @@ public class Servidor {
     }
 }
 
-class InterfazServidor extends JFrame{
+class InterfazServidor extends JFrame implements Runnable{
 
     public InterfazServidor(){
 
@@ -38,7 +38,56 @@ class InterfazServidor extends JFrame{
 
         setVisible(true);
 
+        Thread mihilo = new Thread(this);
 
+        mihilo.start();
+
+    }
+
+    @Override
+    public void run() {
+        //System.out.println("Estoy a la escucha");
+
+        try {
+            ServerSocket servidor = new ServerSocket(8888);
+
+            String mensaje;
+
+            PaqueteEnvio paquete_recibido;
+
+            while(true) {
+
+                Socket misocket = servidor.accept();
+
+                ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
+
+                paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
+
+                mensaje = paquete_recibido.getMensaje();
+
+                /*DataInputStream flujo_entrada = new DataInputStream(misocket.getInputStream());
+
+                String mensaje_texto = flujo_entrada.readUTF();
+
+                areatexto.append("\n" + mensaje_texto);*/
+
+                areatexto.append("\n" + mensaje);
+
+                /*Socket enviaDestinatario = new Socket(ip, 9090);
+
+                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+
+                paqueteReenvio.writeObject(paquete_recibido);
+
+                //paqueteReenvio.close();
+
+                enviaDestinatario.close();*/
+
+                misocket.close();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
