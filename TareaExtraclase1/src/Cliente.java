@@ -25,11 +25,13 @@ class InterfazCliente extends JFrame{
 
     public InterfazCliente(){
 
-        setBounds(500,200,280,350);
+        setBounds(300,200,280,350);
 
         ModeloInterfazCliente modelointerfazc = new ModeloInterfazCliente();
 
         add(modelointerfazc);
+
+        setResizable(false);
 
         setVisible(true);
     }
@@ -46,6 +48,8 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
         add(texto);
 
         campochat = new JTextArea(12,22);
+
+        campochat.setEditable(false);
 
         add(campochat);
 
@@ -71,21 +75,25 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
     public void run() {
         try{
 
-            ServerSocket servido_cliente = new ServerSocket(8080);
+            ServerSocket servidor_cliente = new ServerSocket(8586);
 
             Socket cliente;
+
+            String mensaje;
 
             PaqueteEnvio paqueteRecibido;
 
             while (true){
 
-                cliente = servido_cliente.accept();
+                cliente = servidor_cliente.accept();
 
-                ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
+                ObjectInputStream paqueteReenvio = new ObjectInputStream(cliente.getInputStream());
 
-                paqueteRecibido = (PaqueteEnvio) flujoentrada.readObject();
+                paqueteRecibido = (PaqueteEnvio) paqueteReenvio.readObject();
 
-                campochat.append("\n" + " Cliente" + " : " + paqueteRecibido.getMensaje());
+                mensaje = paqueteRecibido.getMensaje();
+
+                campochat.append("\n" + "Servidor: " + mensaje);
             }
         } catch (Exception e){
 
@@ -103,7 +111,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
             campochat.append("\n" + campo1.getText());
 
             try {
-                Socket misocket = new Socket("192.168.1.4",8888);
+                Socket misocket = new Socket("192.168.1.2",9045);
 
                 PaqueteEnvio datos = new PaqueteEnvio();
 
@@ -134,6 +142,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
     private JTextArea campochat;
 
     private JButton miboton;
+
 }
 
 class PaqueteEnvio implements Serializable {

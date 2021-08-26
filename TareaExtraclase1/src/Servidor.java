@@ -1,14 +1,17 @@
 //Imports que se necesitan
 import javax.swing.*;
 import java.awt.*;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import  java.util.List;
 
-public class Servidor {
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
+
+public class Servidor extends Cliente{
 
     public static void main(String[] args){
 
@@ -24,7 +27,7 @@ class InterfazServidor extends JFrame implements Runnable{
 
     public InterfazServidor(){
 
-        setBounds(500,200,280,350);
+        setBounds(700,200,280,350);
 
         JPanel mipanel = new JPanel();
 
@@ -38,6 +41,8 @@ class InterfazServidor extends JFrame implements Runnable{
 
         setVisible(true);
 
+        setResizable(false);
+
         Thread mihilo = new Thread(this);
 
         mihilo.start();
@@ -49,7 +54,7 @@ class InterfazServidor extends JFrame implements Runnable{
         //System.out.println("Estoy a la escucha");
 
         try {
-            ServerSocket servidor = new ServerSocket(8888);
+            ServerSocket servidor = new ServerSocket(9045);
 
             String mensaje;
 
@@ -71,17 +76,27 @@ class InterfazServidor extends JFrame implements Runnable{
 
                 areatexto.append("\n" + mensaje_texto);*/
 
-                areatexto.append("\n" + mensaje);
+                areatexto.append("\n" + "Cliente " + mensaje);
 
-                /*Socket enviaDestinatario = new Socket(ip, 9090);
+                Socket enviaDestinatario = new Socket("192.168.1.2",8586);
+
+                //String[] calculo = mensaje.split(",");
+
+                //double monto = ((parseInt(calculo[1]) * parseInt(calculo[3]))/100 + (parseInt(calculo[2]) * 0.15));
+
+                //String resultado = String.valueOf(monto);
+
+                PaqueteEnvio valores = new PaqueteEnvio();
+
+                valores.setMensaje("cálculo");
 
                 ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
 
-                paqueteReenvio.writeObject(paquete_recibido);
+                paqueteReenvio.writeObject(valores);
 
-                //paqueteReenvio.close();
+                paqueteReenvio.close();
 
-                enviaDestinatario.close();*/
+                enviaDestinatario.close();
 
                 misocket.close();
             }
@@ -92,4 +107,27 @@ class InterfazServidor extends JFrame implements Runnable{
     }
 
     private	JTextArea areatexto;
+
+    /*class CalculoMonto {
+
+        double monto;
+
+        String resultado;
+
+        StringTokenizer separador = new StringTokenizer(datos);
+
+        List<String> elementos = new ArrayList<String>();
+
+        while(separador.hasMoreTokens()) {
+
+            elementos.add(separador.nextToken());
+        }
+
+        monto = (parseInt(elementos.get(1)) * parseInt(elementos.get(2))/100) + (parseInt(elementos.get(3)) * 0.15);
+
+        resultado = String.valueOf(monto);
+    }*/
+
 }
+
+
