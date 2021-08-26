@@ -49,6 +49,26 @@ class InterfazServidor extends JFrame implements Runnable{
 
     }
 
+    public String calcular_monto(String mensaje){
+        double monto;
+
+        String resultado;
+
+        StringTokenizer separador = new StringTokenizer(mensaje, ",");
+
+        List<String> elementos = new ArrayList<String>();
+
+        while(separador.hasMoreTokens()) {
+            elementos.add(separador.nextToken());
+        }
+
+        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(1))/100 + (parseInt(elementos.get(2)) * 0.15);
+
+        resultado = String.valueOf(monto);
+
+        return resultado;
+    }
+
     @Override
     public void run() {
         //System.out.println("Estoy a la escucha");
@@ -88,7 +108,9 @@ class InterfazServidor extends JFrame implements Runnable{
 
                 PaqueteEnvio valores = new PaqueteEnvio();
 
-                valores.setMensaje("cálculo");
+                String nuevo_mensaje = calcular_monto(mensaje);
+
+                valores.setMensaje(nuevo_mensaje);
 
                 ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
 

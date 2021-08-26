@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import static java.lang.Integer.parseInt;
 
 public class Cliente {
     /**
@@ -69,6 +74,28 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
         mihilo.start();
 
+
+
+    }
+
+    public String calcular_monto(String mensaje){
+        double monto;
+
+        String resultado;
+
+        StringTokenizer separador = new StringTokenizer(mensaje, ",");
+
+        List<String> elementos = new ArrayList<String>();
+
+        while(separador.hasMoreTokens()) {
+            elementos.add(separador.nextToken());
+        }
+
+        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(1))/100 + (parseInt(elementos.get(2)) * 0.15);
+
+        resultado = String.valueOf(monto);
+
+        return resultado;
     }
 
     @Override
