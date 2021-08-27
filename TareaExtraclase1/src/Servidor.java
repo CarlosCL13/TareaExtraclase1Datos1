@@ -1,6 +1,8 @@
 //Imports que se necesitan
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.*;
@@ -11,7 +13,7 @@ import  java.util.List;
 import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 
-public class Servidor extends Cliente{
+public class Servidor {
 
     public static void main(String[] args){
 
@@ -23,25 +25,49 @@ public class Servidor extends Cliente{
     }
 }
 
-class InterfazServidor extends JFrame implements Runnable{
+class InterfazServidor extends JFrame{
 
     public InterfazServidor(){
 
         setBounds(700,200,280,350);
 
-        JPanel mipanel = new JPanel();
+        ModeloInterfazServidor modelointerfazs = new ModeloInterfazServidor();
 
-        mipanel.setLayout(new BorderLayout());
-
-        areatexto = new JTextArea();
-
-        mipanel.add(areatexto,BorderLayout.CENTER);
-
-        add(mipanel);
-
-        setVisible(true);
+        add(modelointerfazs);
 
         setResizable(false);
+
+        setVisible(true);
+    }
+}
+
+class ModeloInterfazServidor extends JPanel implements Runnable{
+
+    public ModeloInterfazServidor(){
+
+        JLabel texto= new JLabel("Chat Servidor");
+
+        texto.setBounds(0,15, 10,10);
+
+        add(texto);
+
+        areatexto = new JTextArea(12,22);
+
+        areatexto.setEditable(false);
+
+        add(areatexto);
+
+        campo1 = new JTextField(20);
+
+        add(campo1);
+
+        miboton=new JButton("Enviar");
+
+        EnviaTexto mievento = new EnviaTexto();
+
+        miboton.addActionListener(mievento);
+
+        add(miboton);
 
         Thread mihilo = new Thread(this);
 
@@ -49,12 +75,28 @@ class InterfazServidor extends JFrame implements Runnable{
 
     }
 
+    public static boolean contieneSoloLetras(String cadena) {
+
+        for (int x = 0; x < cadena.length(); x++) {
+
+            char c = cadena.charAt(x);
+
+            // Si no está entre a y z, ni entre A y Z, ni es un espacio
+
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String calcular_monto(String mensaje){
         double monto;
 
         String resultado;
 
-        StringTokenizer separador = new StringTokenizer(mensaje, ",");
+        StringTokenizer separador = new StringTokenizer(mensaje,",");
 
         List<String> elementos = new ArrayList<String>();
 
@@ -62,7 +104,7 @@ class InterfazServidor extends JFrame implements Runnable{
             elementos.add(separador.nextToken());
         }
 
-        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(1))/100 + (parseInt(elementos.get(2)) * 0.15);
+        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(2))/100 + (parseInt(elementos.get(1)) * 0.15);
 
         resultado = String.valueOf(monto);
 
@@ -71,7 +113,6 @@ class InterfazServidor extends JFrame implements Runnable{
 
     @Override
     public void run() {
-        //System.out.println("Estoy a la escucha");
 
         try {
             ServerSocket servidor = new ServerSocket(9045);
@@ -86,41 +127,35 @@ class InterfazServidor extends JFrame implements Runnable{
 
                 ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
 
-                paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
+                paquete_recibido =  (PaqueteEnvio) paquete_datos.readObject();
 
                 mensaje = paquete_recibido.getMensaje();
 
-                /*DataInputStream flujo_entrada = new DataInputStream(misocket.getInputStream());
+                areatexto.append("\n" + "Cliente-Servidor " + mensaje);
 
-                String mensaje_texto = flujo_entrada.readUTF();
+//-----------------------------------------------------------------------------------------------------------------------------//
 
-                areatexto.append("\n" + mensaje_texto);*/
+                if(mensaje.contains(".") || contieneSoloLetras(mensaje) == true){
+                    System.out.print("");
+                } else{
+                    Socket enviaDestinatario = new Socket("192.168.1.2",8586);
 
-                areatexto.append("\n" + "Cliente " + mensaje);
+                    PaqueteEnvio valores = new PaqueteEnvio();
 
-                Socket enviaDestinatario = new Socket("192.168.1.2",8586);
+                    String nuevo_mensaje = calcular_monto(mensaje);
 
-                //String[] calculo = mensaje.split(",");
+                    valores.setMensaje(nuevo_mensaje);
 
-                //double monto = ((parseInt(calculo[1]) * parseInt(calculo[3]))/100 + (parseInt(calculo[2]) * 0.15));
+                    ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
 
-                //String resultado = String.valueOf(monto);
+                    paqueteReenvio.writeObject(valores);
 
-                PaqueteEnvio valores = new PaqueteEnvio();
+                    paqueteReenvio.close();
 
-                String nuevo_mensaje = calcular_monto(mensaje);
+                    enviaDestinatario.close();
 
-                valores.setMensaje(nuevo_mensaje);
-
-                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
-
-                paqueteReenvio.writeObject(valores);
-
-                paqueteReenvio.close();
-
-                enviaDestinatario.close();
-
-                misocket.close();
+                    misocket.close();
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -128,27 +163,41 @@ class InterfazServidor extends JFrame implements Runnable{
 
     }
 
-    private	JTextArea areatexto;
+    private class EnviaTexto implements ActionListener{
 
-    /*class CalculoMonto {
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
-        double monto;
+            areatexto.append("\n" + "Tú: " + campo1.getText());
 
-        String resultado;
+            try {
+                Socket misocket = new Socket("192.168.1.2",8586);
 
-        StringTokenizer separador = new StringTokenizer(datos);
+                PaqueteEnvio datos = new PaqueteEnvio();
 
-        List<String> elementos = new ArrayList<String>();
+                datos.setMensaje(campo1.getText());
 
-        while(separador.hasMoreTokens()) {
+                ObjectOutputStream paquete_datos = new ObjectOutputStream(misocket.getOutputStream());
 
-            elementos.add(separador.nextToken());
+                paquete_datos.writeObject(datos);
+
+                campo1.setText(null);
+
+                misocket.close();
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                System.out.println(ioException.getMessage());
+            }
+
         }
+    }
 
-        monto = (parseInt(elementos.get(1)) * parseInt(elementos.get(2))/100) + (parseInt(elementos.get(3)) * 0.15);
+    private JTextArea areatexto;
 
-        resultado = String.valueOf(monto);
-    }*/
+    private JTextField campo1;
+
+    private JButton miboton;
 
 }
 

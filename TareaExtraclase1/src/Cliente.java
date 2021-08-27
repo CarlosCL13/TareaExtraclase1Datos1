@@ -1,4 +1,4 @@
-//Imports que se necesitan
+///Imports que se necesitan
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,9 +46,9 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
     public ModeloInterfazCliente(){
 
-        JLabel texto= new JLabel("Chat");
+        JLabel texto= new JLabel("Chat Cliente-Servidor");
 
-        texto.setBounds(0,15, 10,10);
+        texto.setBounds(0,12, 10,10);
 
         add(texto);
 
@@ -78,12 +78,28 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
     }
 
+    public static boolean contieneSoloLetras(String cadena) {
+
+        for (int x = 0; x < cadena.length(); x++) {
+
+            char c = cadena.charAt(x);
+
+            // Si no está entre a y z, ni entre A y Z, ni es un espacio
+
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String calcular_monto(String mensaje){
         double monto;
 
         String resultado;
 
-        StringTokenizer separador = new StringTokenizer(mensaje, ",");
+        StringTokenizer separador = new StringTokenizer(mensaje,",");
 
         List<String> elementos = new ArrayList<String>();
 
@@ -91,7 +107,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
             elementos.add(separador.nextToken());
         }
 
-        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(1))/100 + (parseInt(elementos.get(2)) * 0.15);
+        monto = (double) parseInt(elementos.get(0)) * parseInt(elementos.get(2))/100 + (parseInt(elementos.get(1)) * 0.15);
 
         resultado = String.valueOf(monto);
 
@@ -108,19 +124,42 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
             String mensaje;
 
-            PaqueteEnvio paqueteRecibido;
+            PaqueteEnvio paquete_recibido;
 
             while (true){
 
                 cliente = servidor_cliente.accept();
 
-                ObjectInputStream paqueteReenvio = new ObjectInputStream(cliente.getInputStream());
+                ObjectInputStream paquete_datos = new ObjectInputStream(cliente.getInputStream());
 
-                paqueteRecibido = (PaqueteEnvio) paqueteReenvio.readObject();
+                paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
 
-                mensaje = paqueteRecibido.getMensaje();
+                mensaje = paquete_recibido.getMensaje();
 
                 campochat.append("\n" + "Servidor: " + mensaje);
+
+//-----------------------------------------------------------------------------------------------------------------------------//
+                if(mensaje.contains(".") || contieneSoloLetras(mensaje)){
+                    System.out.print("");
+                } else{
+                    Socket enviaDestinatario = new Socket("192.168.1.2",9045);
+
+                    PaqueteEnvio valores = new PaqueteEnvio();
+
+                    String nuevo_mensaje = calcular_monto(mensaje);
+
+                    valores.setMensaje(nuevo_mensaje);
+
+                    ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+
+                    paqueteReenvio.writeObject(valores);
+
+                    paqueteReenvio.close();
+
+                    enviaDestinatario.close();
+
+                    cliente.close();
+                }
             }
         } catch (Exception e){
 
@@ -133,9 +172,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            //System.out.println(campo1.getText());
-
-            campochat.append("\n" + campo1.getText());
+            campochat.append("\n" + "Tú: " + campo1.getText());
 
             try {
                 Socket misocket = new Socket("192.168.1.2",9045);
@@ -148,13 +185,9 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
                 paquete_datos.writeObject(datos);
 
+                campo1.setText(null);
+
                 misocket.close();
-
-				/*DataOutputStream flujo_salida = new DataOutputStream(misocket.getOutputStream());
-
-				flujo_salida.writeUTF(campo1.getText());
-
-				flujo_salida.close();*/
 
             } catch (IOException ioException) {
                 ioException.printStackTrace();
