@@ -1,6 +1,4 @@
-//Imports que se necesitan
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -9,11 +7,24 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import  java.util.List;
-
 import static java.lang.Integer.parseInt;
-import static java.lang.Integer.valueOf;
+
+/**
+ * Esta es la clase Servidor, en la cual se programa lo necesario para comunicarse con el cliente.
+ *
+ * @author Carlos Andres Contreras Luna
+ *
+ * @version 1.0
+ *
+ * @see Cliente
+ */
 
 public class Servidor {
+
+    /**
+     * Este es el metodo main de la clase Servidor.
+     * @param args Contiene la instancia de la clase InterfazServidor.
+     */
 
     public static void main(String[] args){
 
@@ -25,7 +36,15 @@ public class Servidor {
     }
 }
 
+/**
+ * Esta es la clase InterfazServidor en la cual se encuentran metodos y atributos de la interfaz del servidor.
+ */
+
 class InterfazServidor extends JFrame{
+
+    /**
+     * En este metodo se programa algunas características de la interfaz del chat que vera el servidor, ademas, se instancia la clase ModeloInterfazServidor.
+     */
 
     public InterfazServidor(){
 
@@ -41,7 +60,15 @@ class InterfazServidor extends JFrame{
     }
 }
 
+/**
+ * La clase ModeloInterfazServidor posee los elementos de la interfaz que permiten escribir y enviar texto al cliente-Servidor, tambien implementa "Runnable" para poder crear un thread.
+ */
+
 class ModeloInterfazServidor extends JPanel implements Runnable{
+
+    /**
+     * Este metodo posee todos los elementos que se muestran en la interfaz del servidor.
+     */
 
     public ModeloInterfazServidor(){
 
@@ -75,13 +102,19 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
     }
 
+    /**
+     * Este metodo permite ver si el mensaje recibido contiene solo letras.
+     *
+     * @param cadena es la variable tipo string que se recibe el metodo.
+     *
+     * @return retorna un booleano.
+     */
+
     public static boolean contieneSoloLetras(String cadena) {
 
         for (int x = 0; x < cadena.length(); x++) {
 
             char c = cadena.charAt(x);
-
-            // Si no está entre a y z, ni entre A y Z, ni es un espacio
 
             if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
 
@@ -90,6 +123,14 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
         }
         return true;
     }
+
+    /**
+     * Este metodo permite calcular el monto con los valores recibidos.
+     *
+     * @param mensaje es la variable que recibe el string con los valores.
+     *
+     * @return retorna un número tipo double con el resultado del monto.
+     */
 
     public String calcular_monto(String mensaje){
         double monto;
@@ -111,6 +152,10 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
         return resultado;
     }
 
+    /**
+     * El metodo run contiene los sockets y la parte del codigo que permite la comunicacion con el Cliente-Servidor y recibir mensajes.
+     */
+
     @Override
     public void run() {
 
@@ -131,7 +176,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
                 mensaje = paquete_recibido.getMensaje();
 
-                areatexto.append("\n" + "Cliente-Servidor " + mensaje);
+                areatexto.append("\n" + "Cliente-Servidor: " + mensaje);
 
 //-----------------------------------------------------------------------------------------------------------------------------//
 
@@ -163,6 +208,10 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
     }
 
+    /**
+     * Esta clase permite, como su nombre lo indica, enviar texto o mejor dicho los mensaje hacia el Cliente-Servidor.
+     */
+
     private class EnviaTexto implements ActionListener{
 
         @Override
@@ -192,6 +241,10 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
         }
     }
+
+    /**
+     * Aqui se encuentran los elementos utilizados en la interfaz.
+     */
 
     private JTextArea areatexto;
 

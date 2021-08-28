@@ -1,4 +1,3 @@
-///Imports que se necesitan
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,13 +6,24 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import static java.lang.Integer.parseInt;
 
+/**
+ * Esta es la clase Cliente, en la cual se programa lo necesario para comunicarse con el servidor.
+ *
+ * @author Carlos Andres Contreras Luna
+ *
+ * @version 1.0
+ *
+ * @see Cliente
+ */
+
 public class Cliente {
+
     /**
-     * @author Carlos Andrés Contreras Luna
-     * @param  args This is the class client and have all the methods to comunicate with the server
+     * Este es el metodo main de la clase Cliente.
+     *
+     * @param args Contiene la instancia de la clase InterfazCliente.
      */
 
     public static void main (String[] args){
@@ -26,7 +36,15 @@ public class Cliente {
 
 }
 
+/**
+ * Esta es la clase InterfazCliente en la cual se encuentran metodos y atributos de la interfaz del cliente.
+ */
+
 class InterfazCliente extends JFrame{
+
+    /**
+     * En este metodo se programa algunas caracteristicas de  la interfaz del chat que vera el cliente, además, se instancia la clase ModeloInterfazCliente.
+     */
 
     public InterfazCliente(){
 
@@ -42,7 +60,15 @@ class InterfazCliente extends JFrame{
     }
 }
 
+/**
+ * La clase ModeloInterfazCliente posee los elementos de la interfaz que permiten escribir y enviar texto al servidor, tambien implementa "Runnable" para poder crear un thread.
+ */
+
 class ModeloInterfazCliente extends JPanel implements Runnable{
+
+    /**
+     * Este método posee todos los elementos que se muestran en la interfaz del cliente.
+     */
 
     public ModeloInterfazCliente(){
 
@@ -78,13 +104,19 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
     }
 
+    /**
+     * Este metodo permite ver si el mensaje recibido contiene solo letras.
+     *
+     * @param cadena es la variable tipo string que se recibe el metodo.
+     *
+     * @return retorna un booleano.
+     */
+
     public static boolean contieneSoloLetras(String cadena) {
 
         for (int x = 0; x < cadena.length(); x++) {
 
             char c = cadena.charAt(x);
-
-            // Si no está entre a y z, ni entre A y Z, ni es un espacio
 
             if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) {
 
@@ -93,6 +125,14 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
         }
         return true;
     }
+
+    /**
+     * Este metodo permite calcular el monto con los valores recibidos.
+     *
+     * @param mensaje es la variable que recibe el string con los valores.
+     *
+     * @return retorna un numero tipo double con el resultado del monto.
+     */
 
     public String calcular_monto(String mensaje){
         double monto;
@@ -113,6 +153,10 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
         return resultado;
     }
+
+    /**
+     * El metodo run contiene los sockets y la parte del codigo que permite la comunicacion con el servidor y recibir mensajes.
+     */
 
     @Override
     public void run() {
@@ -167,7 +211,16 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Esta clase permite, como su nombre lo indica, enviar texto o mejor dicho los mensaje hacia el servidor.
+     */
+
     private class EnviaTexto implements ActionListener{
+
+        /**
+         * Este metodo empaqueta el mensaje escrito en el campo de texto y gracias al socket permite enviar el mensaje al servidor.
+         * @param e permite conectar el boton enviar con el metodo para enviar el mensaje escrito.
+         */
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -197,6 +250,9 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Aqui se encuentran los elementos utilizados en la interfaz.
+     */
     private JTextField campo1;
 
     private JTextArea campochat;
@@ -205,7 +261,15 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
 }
 
+/**
+ * Esta clase permite empaquetar el mensaje que se va a enviar.
+ */
+
 class PaqueteEnvio implements Serializable {
+
+    /**
+     * Aquí se encuentran los metodos que permiten cambiar y obtener los datos del atributo mensaje.
+     */
 
     private String mensaje;
 
