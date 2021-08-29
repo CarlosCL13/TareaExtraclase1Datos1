@@ -217,7 +217,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            areatexto.append("\n" + "Tú: " + campo1.getText());
+            areatexto.append("\n" + "Tu: " + campo1.getText());
 
             try {
                 Socket misocket = new Socket("192.168.1.2",8586);
