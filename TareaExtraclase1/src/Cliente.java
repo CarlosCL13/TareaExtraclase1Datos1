@@ -15,7 +15,7 @@ import static java.lang.Integer.parseInt;
  *
  * @version 1.0
  *
- * @see Cliente
+ * @see Servidor
  */
 
 public class Cliente {
@@ -109,7 +109,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
      *
      * @param cadena es la variable tipo string que se recibe el metodo.
      *
-     * @return retorna un booleano.
+     * @return retorna un booleano para saber si el mensaje tiene solo letras, para que asi no se active el metodo de hacer el calculo.
      */
 
     public static boolean contieneSoloLetras(String cadena) {
@@ -219,13 +219,13 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
         /**
          * Este metodo empaqueta el mensaje escrito en el campo de texto y gracias al socket permite enviar el mensaje al servidor.
-         * @param e permite conectar el boton enviar con el metodo para enviar el mensaje escrito.
+         * @param e Es el ActionEvent que permite conectar el boton enviar con el metodo para enviar el mensaje escrito.
          */
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            campochat.append("\n" + "Tú: " + campo1.getText());
+            campochat.append("\n" + "Tu: " + campo1.getText());
 
             try {
                 Socket misocket = new Socket("192.168.1.2",9045);
@@ -268,7 +268,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 class PaqueteEnvio implements Serializable {
 
     /**
-     * Aquí se encuentran los metodos que permiten cambiar y obtener los datos del atributo mensaje.
+     * Aqui se encuentran los metodos que permiten cambiar y obtener los datos del atributo mensaje.
      */
 
     private String mensaje;

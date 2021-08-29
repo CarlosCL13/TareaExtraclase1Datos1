@@ -107,7 +107,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
      *
      * @param cadena es la variable tipo string que se recibe el metodo.
      *
-     * @return retorna un booleano.
+     * @return retorna un booleano para saber si el mensaje tiene solo letras, para que asi no se active el metodo de hacer el calculo.
      */
 
     public static boolean contieneSoloLetras(String cadena) {
@@ -209,7 +209,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
     }
 
     /**
-     * Esta clase permite, como su nombre lo indica, enviar texto o mejor dicho los mensaje hacia el Cliente-Servidor.
+     * Esta clase permite, como su nombre lo indica, enviar texto o mejor dicho los mensajes hacia el Cliente-Servidor.
      */
 
     private class EnviaTexto implements ActionListener{
