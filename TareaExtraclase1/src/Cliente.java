@@ -82,7 +82,9 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
         campochat.setEditable(false);
 
-        add(campochat);
+        scroll = new JScrollPane(campochat);
+
+        add(scroll);
 
         campo1 = new JTextField(20);
 
@@ -258,6 +260,8 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
     private JTextArea campochat;
 
     private JButton miboton;
+
+    private JScrollPane scroll;
 
 }
 

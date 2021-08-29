@@ -82,7 +82,9 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
         areatexto.setEditable(false);
 
-        add(areatexto);
+        scroll = new JScrollPane(areatexto);
+
+        add(scroll);
 
         campo1 = new JTextField(20);
 
@@ -251,6 +253,8 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
     private JTextField campo1;
 
     private JButton miboton;
+
+    private JScrollPane scroll;
 
 }
 
