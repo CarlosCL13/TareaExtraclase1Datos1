@@ -72,7 +72,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
     public ModeloInterfazServidor(){
 
-        JLabel texto= new JLabel("Chat Servidor");
+        JLabel texto= new JLabel("Chat Servidor-Cliente");
 
         texto.setBounds(0,15, 10,10);
 
@@ -178,7 +178,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
 
                 mensaje = paquete_recibido.getMensaje();
 
-                areatexto.append("\n" + "Cliente-Servidor: " + mensaje);
+                areatexto.append("\n" + "Cliente: " + mensaje);
 
 //-----------------------------------------------------------------------------------------------------------------------------//
 
@@ -245,7 +245,7 @@ class ModeloInterfazServidor extends JPanel implements Runnable{
     }
 
     /**
-     * Aqui se encuentran los elementos utilizados en la interfaz.
+     * Elementos utilizados en la interfaz.
      */
 
     private JTextArea areatexto;

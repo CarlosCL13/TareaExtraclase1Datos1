@@ -72,7 +72,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
     public ModeloInterfazCliente(){
 
-        JLabel texto= new JLabel("Chat Cliente-Servidor");
+        JLabel texto= new JLabel("Chat Cliente");
 
         texto.setBounds(0,12, 10,10);
 
@@ -182,7 +182,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 
                 mensaje = paquete_recibido.getMensaje();
 
-                campochat.append("\n" + "Servidor: " + mensaje);
+                campochat.append("\n" + "Servidor/Cliente: " + mensaje);
 
 //-----------------------------------------------------------------------------------------------------------------------------//
                 if(mensaje.contains(".") || contieneSoloLetras(mensaje)){
@@ -253,7 +253,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
     }
 
     /**
-     * Aqui se encuentran los elementos utilizados en la interfaz.
+     * Elementos utilizados en la interfaz.
      */
     private JTextField campo1;
 
