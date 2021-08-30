@@ -67,7 +67,7 @@ class InterfazCliente extends JFrame{
 class ModeloInterfazCliente extends JPanel implements Runnable{
 
     /**
-     * Este método posee todos los elementos que se muestran en la interfaz del cliente.
+     * Este metodo posee todos los elementos que se muestran en la interfaz del cliente.
      */
 
     public ModeloInterfazCliente(){
@@ -272,7 +272,7 @@ class ModeloInterfazCliente extends JPanel implements Runnable{
 class PaqueteEnvio implements Serializable {
 
     /**
-     * Aqui se encuentran los metodos que permiten cambiar y obtener los datos del atributo mensaje.
+     * Los siguientes metodos permiten cambiar y obtener los datos del atributo mensaje.
      */
 
     private String mensaje;

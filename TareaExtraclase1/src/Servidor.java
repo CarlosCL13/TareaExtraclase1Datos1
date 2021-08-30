@@ -43,7 +43,7 @@ public class Servidor {
 class InterfazServidor extends JFrame{
 
     /**
-     * En este metodo se programa algunas características de la interfaz del chat que vera el servidor, ademas, se instancia la clase ModeloInterfazServidor.
+     * En este metodo se programa algunas caracteristicas de la interfaz del chat que vera el servidor, ademas, se instancia la clase ModeloInterfazServidor.
      */
 
     public InterfazServidor(){
